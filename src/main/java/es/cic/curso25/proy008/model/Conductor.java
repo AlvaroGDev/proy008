@@ -7,11 +7,7 @@ public class Conductor {
     private String apellido;
     private String tfno;
     private String email;
-    private enum Genero {
-        HOMBRE,
-        MUJER,
-        OTRO
-    }
+    private String genero;
     
     public Long getId() {
         return id;
@@ -43,6 +39,14 @@ public class Conductor {
     public void setEmail(String email) {
         this.email = email;
     };
+
+     public void setGenero(String genero) {
+        this.genero = genero;
+    }
+
+    public String getGenero(){
+        return genero;
+    }
 
     
 }
