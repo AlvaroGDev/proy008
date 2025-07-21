@@ -33,7 +33,7 @@ public class ConductorControllerIntegrationTest {
         miConductor.setApellido("Testeador");
         miConductor.setTfno("123654987");
         miConductor.setEmail("test@cic.es");
-        miConductor.setGenero(HOMBRE);
+        miConductor.setGenero("M");
     }
 
 
