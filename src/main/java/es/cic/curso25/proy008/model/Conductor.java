@@ -1,8 +1,16 @@
 package es.cic.curso25.proy008.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
+@Entity
 public class Conductor {
 
+    @Id
+    @GeneratedValue
     private Long id;
+
     private String nombre;
     private String apellido;
     private String tfno;
