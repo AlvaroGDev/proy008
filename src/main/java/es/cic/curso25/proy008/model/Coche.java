@@ -10,17 +10,17 @@ public class Coche {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String marca;
     private String tipoCombustible;
     private int numPuertas;
     private int numPlazas;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getMarca() {
