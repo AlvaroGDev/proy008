@@ -1,6 +1,7 @@
 package es.cic.curso25.proy008.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,13 @@ public class ConductorService {
         return conductorRepository.save(conductor);
     }
 
-    public List<Conductor> get(){
+    public Conductor get(Long id){
+
+        Optional<Conductor> conductor = conductorRepository.findById(id);
+        return conductor.orElse(null);
+    }
+
+    public List<Conductor> getAll(){
         return conductorRepository.findAll();
     }
 
