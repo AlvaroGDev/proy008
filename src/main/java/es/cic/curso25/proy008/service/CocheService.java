@@ -26,7 +26,7 @@ public class CocheService {
 
     public Optional<Coche> get(Long id){
         Optional<Coche> coche = cocheRepository.findById(id);
-        LOGGER.info("Coche con id " + coche.get().getId() + " listado");
+        LOGGER.info("Coche listado");
         return coche;
     }
 

@@ -1,11 +1,13 @@
 package es.cic.curso25.proy008.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +23,11 @@ public class CocheServiceTest {
 
     @Autowired
     CocheRepository cocheRepository;
+
+    @AfterEach
+    void cleanData() {
+        cocheRepository.deleteAll();
+    }
 
     @Test
     void testCreate() {
@@ -45,7 +52,7 @@ public class CocheServiceTest {
         Long idResult = cocheService.create(coche);
 
         Optional<Coche> cocheResult = cocheService.get(idResult);
-        assertTrue(cocheResult.isPresent());
+        assertTrue(cocheResult != null);
     }
     
     @Test
@@ -95,11 +102,11 @@ public class CocheServiceTest {
         coche.setTipoCombustible("Diesel");
     
         Long idResult = cocheService.create(coche);
-        
+
         cocheService.delete(idResult);
 
         Optional<Coche> cocheEliminado = cocheService.get(idResult);
-    
-        assertTrue(!cocheEliminado.isPresent());
+
+        assertFalse(cocheEliminado.isPresent());
     }
 }
