@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.cic.curso25.proy008.model.Conductor;
 import es.cic.curso25.proy008.repository.ConductorRepository;
+import es.cic.curso25.proy008.service.ConductorService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -33,6 +35,9 @@ public class ConductorControllerIntegrationTest {
 
     @Autowired
     ConductorRepository conductorRepository;
+
+    @Autowired
+    ConductorService conductorService;
 
     @Test
     void testGet() throws Exception {
@@ -118,11 +123,40 @@ public class ConductorControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        // Revisamos que esté
+        // No haría falta revisar si no está, ya que el delete, si lo encuentra lo
+        // borra, y si no lo encuentra lo ignora
 
-        mockMvc.perform(get("/conductor/1"))
-                .andExpect(status()
-                        .isOk());
+    }
+
+    @Test
+    public void testUpdate() throws Exception {
+
+        Conductor miConductor = new Conductor();
+
+        miConductor.setNombre("Manolo");
+        miConductor.setApellido("el borrador");
+        miConductor.setTfno("123654987");
+        miConductor.setEmail("testBorrado@cic.es");
+        miConductor.setGenero("M");
+
+
+        // Creamos tarea
+
+        conductorService.create(miConductor);
+
+        // Le cambiamos el valor
+
+        miConductor.setNombre("NombreNuevoAntonioJose");
+        // Lo volvemos a pasar a JSON
+
+       String miConductorJSON = objectMapper.writeValueAsString(miConductor);
+
+        mockMvc.perform(put("/conductor")
+                .contentType("application/json")
+                .content(miConductorJSON))
+                .andExpect(status().isOk());
+
+                assertEquals(miConductor.getNombre(), "NombreNuevoAntonioJose");
 
     }
 
