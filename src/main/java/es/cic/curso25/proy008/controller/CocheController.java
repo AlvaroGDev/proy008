@@ -27,7 +27,7 @@ public class CocheController {
     CocheService cocheService;
 
     @GetMapping("/{id}")
-    public Optional<Coche> get(@PathVariable Long id) {
+    public Optional<Coche> get(@PathVariable(required = true) Long id) {
         if (cocheService.get(id) == null){
             throw new SecurityException("Error: me estás intentando crear un coche pasando un id");
         }
@@ -61,7 +61,7 @@ public class CocheController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable(required = true) Long id) {
         LOGGER.info("DELETE '/coche/id' eliminar coche por id");
         cocheService.delete(id);
     }

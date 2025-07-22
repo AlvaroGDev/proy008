@@ -27,7 +27,7 @@ public class ConductorController {
     private ConductorService conductorService;
 
     @GetMapping("/{id}")
-    public Conductor get(@PathVariable Long id) {
+    public Conductor get(@PathVariable(required = true) Long id) {
         if (conductorService.get(id) == null)
             throw new SecurityException("Error: me estás intentando buscar un id que no existe");
 
@@ -49,7 +49,7 @@ public class ConductorController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable(required = true) Long id) {
         conductorService.delete(id);
     }
 
