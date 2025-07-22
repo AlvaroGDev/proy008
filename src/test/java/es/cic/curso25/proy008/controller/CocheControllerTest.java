@@ -145,8 +145,7 @@ public class CocheControllerTest {
         cocheService.create(coche);
 
         coche.setMarca("Seat");
-        cocheService.update(coche);
-
+        
         // Convierte el objeto Coche a formato JSON para enviarlo en la petición
         String cocheJson = objectMapper.writeValueAsString(coche);
 

@@ -28,6 +28,9 @@ public class CocheController {
 
     @GetMapping("/{id}")
     public Optional<Coche> get(@PathVariable Long id) {
+        if (cocheService.get(id) == null){
+            throw new SecurityException("Error: me estás intentando buscar un id que no existe");
+        }
         LOGGER.info("GET '/coche/id' obtener coche por id");
         Optional<Coche> coche = cocheService.get(id);
         return coche;
@@ -50,6 +53,9 @@ public class CocheController {
 
     @PutMapping
     public void update(@RequestBody Coche coche) {
+        if (coche.getId() == null){
+            throw new SecurityException("Estás intentando modificar un registro que no existe");
+        }
         LOGGER.info("PUT '/coche' actualizar coche en BBDD");
         cocheService.update(coche);
     }
