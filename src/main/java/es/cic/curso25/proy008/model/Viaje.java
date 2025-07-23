@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class Viajes {
+public class Viaje {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
