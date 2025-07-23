@@ -45,7 +45,7 @@ public class ConductorCompraCocheIntegrationTest {
     void testComprarCoche() throws Exception {
 
         /*
-         * Primero se crea un Coche
+         * Primero se crea un Conductor
          */
 
         Conductor miConductor = new Conductor();
