@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,21 +60,22 @@ public class CocheControllerTest {
 
         // Se realiza una petición POST simulada al endpoint /coche con los datos del coche en formato JSON
         mockMvc.perform(post("/coche")
-                .contentType("application/json")
-                .content(cocheJson))
-                .andExpect(status().isOk())
-                .andExpect(result -> {
-                    // Extrae el contenido de la respuesta como string
-                    String respuesta = result.getResponse().getContentAsString();
-                    // Convierte la respuesta JSON en tipo Long y después se busca el coche con ese Id
-                    // Coche cocheCreado = objectMapper.readValue(respuesta, Coche.class);
-                    Long idCoche = objectMapper.readValue(respuesta,Long.class);
-                    Optional<Coche> cocheCreado = cocheService.get(idCoche);
-                    // Verifica que el coche creado tiene un ID no nulo
-                    assertTrue(cocheCreado.get().getId() != null, "El valor debe de ser no nulo");
-                    // Verifica que el coche creado está presente en el sistema
-                    assertTrue(cocheCreado.isPresent());
-                });
+                                .contentType("application/json")
+                                .content(cocheJson))
+                                .andDo(print())
+                                .andExpect(status().isOk())
+                                .andExpect(result -> {
+                                    // Extrae el contenido de la respuesta como string
+                                    String respuesta = result.getResponse().getContentAsString();
+                                    // Convierte la respuesta JSON en tipo Long y después se busca el coche con ese Id
+                                    // Coche cocheCreado = objectMapper.readValue(respuesta, Coche.class);
+                                    Long idCoche = objectMapper.readValue(respuesta,Long.class);
+                                    Optional<Coche> cocheCreado = cocheService.get(idCoche);
+                                    // Verifica que el coche creado tiene un ID no nulo
+                                    assertTrue(cocheCreado.get().getId() != null, "El valor debe de ser no nulo");
+                                    // Verifica que el coche creado está presente en el sistema
+                                    assertTrue(cocheCreado.isPresent());
+                                });
     }
     
     @Test
@@ -88,6 +90,7 @@ public class CocheControllerTest {
 
         mockMvc.perform(get("/coche/" + coche.getId())
                                 .contentType("application/json"))
+                                .andDo(print())
                                 // Validar el estado HTTP
                                 .andExpect(status().isOk())
                                 // Validar el contenido del JSON
@@ -121,6 +124,7 @@ public class CocheControllerTest {
 
         mockMvc.perform(get("/coche")
                                 .contentType("application/json"))
+                                .andDo(print())
                                 // Validar el estado HTTP
                                 .andExpect(status().isOk())
                                 // Validar el contenido del JSON
@@ -150,9 +154,10 @@ public class CocheControllerTest {
         String cocheJson = objectMapper.writeValueAsString(coche);
 
         mockMvc.perform(put("/coche")
-            .contentType("application/json")
-            .content(cocheJson))
-            .andExpect(status().isOk());
+                                .contentType("application/json")
+                                .content(cocheJson))
+                                .andDo(print())
+                                .andExpect(status().isOk());
 
         // Verifica que el coche fue atualizado correctamente
         assertEquals("Seat", coche.getMarca());
@@ -169,6 +174,7 @@ public class CocheControllerTest {
         Long idCoche = cocheService.create(coche);
 
         mockMvc.perform(delete("/coche/" + coche.getId()))
+                                .andDo(print())
                                 .andExpect(status().isOk());
 
         // Verifica que el coche ya no esta en la BBDD
