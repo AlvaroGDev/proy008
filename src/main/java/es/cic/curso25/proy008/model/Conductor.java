@@ -1,14 +1,18 @@
 package es.cic.curso25.proy008.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Conductor {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String nombre;
@@ -16,10 +20,32 @@ public class Conductor {
     private String tfno;
     private String email;
     private String genero;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "conductor")
+    private Viaje viaje;
+    // El ignore básicamente le dice que a la hora de crear un viaje junto con el conductor, no lo haga
+    // en principio, el orden debería ser, un conductor se puede crear por si solo, pero un viaje DEBE llamar a un conductor y crearlo si no existe uno
+
+    public Conductor(){
+
+    }
+
+    public Conductor(Long id, String nombre, String apellido, String tfno, String email, String genero, Viaje viaje) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.tfno = tfno;
+        this.email = email;
+        this.genero = genero;
+        this.viaje = viaje;
+    }
+
     
     public Long getId() {
         return id;
     }
+    
     public void setId(Long id) {
         this.id = id;
     }
@@ -54,6 +80,14 @@ public class Conductor {
 
     public String getGenero(){
         return genero;
+    }
+
+    public Viaje getViaje(){
+        return viaje;
+    }
+
+    public void setViaje(Viaje viaje){
+        this.viaje = viaje;
     }
 
     

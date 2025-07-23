@@ -15,7 +15,7 @@ public class Viaje {
     private Long id;
 
     private String destino;
-    private String distanciaKm;
+    private long distanciaKm;
     private String estado;
     private String fecha;
 
@@ -44,11 +44,11 @@ referenciando al id de conductor que ha creado previamente
         this.destino = destino;
     }
 
-    public String getDistanciaKm() {
+    public long getDistanciaKm() {
         return distanciaKm;
     }
 
-    public void setDistanciaKm(String distanciaKm) {
+    public void setDistanciaKm(long distanciaKm) {
         this.distanciaKm = distanciaKm;
     }
 

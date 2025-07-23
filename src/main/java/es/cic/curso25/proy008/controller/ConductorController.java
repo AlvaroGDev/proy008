@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.cic.curso25.proy008.model.Conductor;
+import es.cic.curso25.proy008.model.Viaje;
 import es.cic.curso25.proy008.service.ConductorService;
+import es.cic.curso25.proy008.service.ViajeService;
 
 import java.util.List;
 
@@ -21,10 +23,11 @@ import java.util.List;
 @RequestMapping("/conductor")
 public class ConductorController {
 
-
-
     @Autowired
     private ConductorService conductorService;
+
+    @Autowired
+    private ViajeService viajeService;
 
     @GetMapping("/{id}")
     public Conductor get(@PathVariable(required = true) Long id) {
@@ -48,9 +51,10 @@ public class ConductorController {
         return conductorService.create(conductor);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable(required = true) Long id) {
-        conductorService.delete(id);
+    @PostMapping("/generaviaje")
+    public Viaje create(@RequestBody Viaje viaje){
+        Viaje viajeCreado = viajeService.create(viaje);
+        return viajeCreado;
     }
 
     @PutMapping
@@ -60,6 +64,11 @@ public class ConductorController {
 
         conductorService.update(conductor);
 
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable(required = true) Long id) {
+        conductorService.delete(id);
     }
 
 }

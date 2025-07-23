@@ -4,11 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Optional;
 
 import es.cic.curso25.proy008.model.Viaje;
 import es.cic.curso25.proy008.service.ViajeService;
@@ -20,6 +25,23 @@ public class ViajeController {
 
     @Autowired
     private ViajeService viajeService;
+
+    @GetMapping
+    public List<Viaje> get(){
+            LOGGER.info("Leo todos los viajes");
+
+            return viajeService.get();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Viaje> get(@PathVariable Long id){
+        LOGGER.info("Leo el viaje con id: " + id);
+
+        Optional<Viaje> viaje = viajeService.get(id);
+
+        return viaje;
+    }
+
 
     @PostMapping
     public Viaje create(@RequestBody Viaje viaje) {
