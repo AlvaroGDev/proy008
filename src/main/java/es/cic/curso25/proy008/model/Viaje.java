@@ -2,6 +2,7 @@ package es.cic.curso25.proy008.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,7 +20,7 @@ public class Viaje {
     private String estado;
     private String fecha;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}) 
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.EAGER) 
     private Conductor conductor;
 /*Esto en la práctica lo que hace es:
 Para generar un viaje, necesitamos un conductor (ya que tiene como clave foránea un idConductor)

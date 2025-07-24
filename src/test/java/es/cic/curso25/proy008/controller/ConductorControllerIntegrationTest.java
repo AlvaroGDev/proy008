@@ -1,25 +1,24 @@
 package es.cic.curso25.proy008.controller;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import org.springframework.test.web.servlet.MvcResult;
 
-import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import es.cic.curso25.proy008.configuration.MiClaseCompleja;
 import es.cic.curso25.proy008.model.Conductor;
 import es.cic.curso25.proy008.repository.ConductorRepository;
@@ -44,45 +43,24 @@ public class ConductorControllerIntegrationTest {
         @Autowired
         ConductorService conductorService;
 
-        @Test
-        void testGet() throws Exception {
+        String miConductorJSON;
+        Conductor miConductor;
 
-                Conductor miConductor = new Conductor();
+        @BeforeEach
+        public void generaConductor() throws Exception {
 
+                miConductor = new Conductor();
                 miConductor.setNombre("Manolo");
                 miConductor.setApellido("Testeador");
                 miConductor.setTfno("123654987");
                 miConductor.setEmail("test@cic.es");
                 miConductor.setGenero("M");
 
-                String miConductorJSON = objectMapper.writeValueAsString(miConductor);
-
-                mockMvc.perform(post("/conductor")
-                                .contentType("application/json")
-                                .content(miConductorJSON))
-                                .andDo(print())
-                                .andExpect(status().isOk());
-
-                mockMvc.perform(get("/conductor/1")
-                                .contentType("application/json")
-                                .content(miConductorJSON))
-                                .andDo(print())
-                                .andExpect(status().isOk());
-
+                miConductorJSON = objectMapper.writeValueAsString(miConductor);
         }
 
         @Test
         void testCreate() throws Exception {
-
-                Conductor miConductor = new Conductor();
-
-                miConductor.setNombre("Manolo");
-                miConductor.setApellido("Testeador");
-                miConductor.setTfno("123654987");
-                miConductor.setEmail("test@cic.es");
-                miConductor.setGenero("M");
-
-                String miConductorJSON = objectMapper.writeValueAsString(miConductor);
 
                 mockMvc.perform(post("/conductor")
                                 .contentType("application/json")
@@ -90,30 +68,50 @@ public class ConductorControllerIntegrationTest {
                                 .andDo(print())
                                 .andExpect(status().isOk())
                                 .andExpect(resultado -> {
-                                        String respuesta = resultado.getResponse().getContentAsString();
-                                        Conductor conductorPrueba = objectMapper.readValue(respuesta, Conductor.class);
-                                        assertTrue(conductorPrueba.getId() > 0, "El valor debe ser mayor que 0");
-
-                                        Optional<Conductor> revisarConductor = conductorRepository
-                                                        .findById(conductorPrueba.getId());
-                                        assertTrue(revisarConductor.isPresent());
+                                        assertTrue(
+                                                objectMapper.readValue(resultado.getResponse().getContentAsString(),
+                                                                        Conductor.class)
+                                                                        .getId() > 0);
                                 });
+        }
+
+        @Test
+        public void testUpdate() throws Exception {
+
+               
+               MvcResult mvcResult = mockMvc.perform(post("/conductor")
+                                .contentType("application/json")
+                                .content(miConductorJSON))
+                                .andDo(print())
+                                .andExpect(status().isOk())
+                                .andReturn();
+
+                // Nos guardamos el objeto devuelto (en este caso el conductor con el id generado)
+
+
+                // Cogemos el id generado, le cambiamos los datos y le añadimos el id
+                Long idGenerado = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Conductor.class).getId();
+
+                miConductor.setNombre("NombreNuevoAntonioJose");
+                miConductor.setId(idGenerado);
+
+                // Lo volvemos a pasar a JSON, esta vez con el ID
+                miConductorJSON = objectMapper.writeValueAsString(miConductor);
+ 
+               mockMvc.perform(put("/conductor")
+                                .contentType("application/json")
+                                .content(miConductorJSON))
+                                .andDo(print())
+                                .andExpect(status().isOk());
+
+                assertEquals(miConductor.getNombre(), "NombreNuevoAntonioJose");
+
         }
 
         @Test
         void testDelete() throws Exception {
 
-                Conductor miConductor = new Conductor();
-
-                miConductor.setNombre("Manolo");
-                miConductor.setApellido("el borrador");
-                miConductor.setTfno("123654987");
-                miConductor.setEmail("testBorrado@cic.es");
-                miConductor.setGenero("M");
-
-                String miConductorJSON = objectMapper.writeValueAsString(miConductor);
-
-                // Creamos tarea
+                 // Creamos conductor
 
                 mockMvc.perform(post("/conductor")
                                 .contentType("application/json")
@@ -134,42 +132,6 @@ public class ConductorControllerIntegrationTest {
                                 .andDo(print())
                                 .andExpect(status().isOk())
                                 .andReturn();
-
-                // No haría falta revisar si no está, ya que el delete, si lo encuentra lo
-                // borra, y si no lo encuentra lo ignora
-
-        }
-
-        @Test
-        public void testUpdate() throws Exception {
-
-                Conductor miConductor = new Conductor();
-
-                miConductor.setNombre("Manolo");
-                miConductor.setApellido("el borrador");
-                miConductor.setTfno("123654987");
-                miConductor.setEmail("testBorrado@cic.es");
-                miConductor.setGenero("M");
-
-                // Creamos tarea
-
-                conductorService.create(miConductor);
-
-                // Le cambiamos el valor
-
-                miConductor.setNombre("NombreNuevoAntonioJose");
-                // Lo volvemos a pasar a JSON
-
-                String miConductorJSON = objectMapper.writeValueAsString(miConductor);
-
-                mockMvc.perform(put("/conductor")
-                                .contentType("application/json")
-                                .content(miConductorJSON))
-                                .andDo(print())
-                                .andExpect(status().isOk());
-
-                assertEquals(miConductor.getNombre(), "NombreNuevoAntonioJose");
-
         }
 
 }

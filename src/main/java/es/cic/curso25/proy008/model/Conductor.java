@@ -23,20 +23,23 @@ public class Conductor {
     private String genero;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "conductor")
+    @OneToOne(mappedBy = "conductor", cascade = CascadeType.REMOVE) // Esto hará que al borrar un conductor borre también el viaje asociado
     private Viaje viaje;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "conductor")
+    @OneToOne(mappedBy = "conductor") 
     private Coche coche;
-    // El ignore básicamente le dice que a la hora de crear un viaje junto con el conductor, no lo haga
-    // en principio, el orden debería ser, un conductor se puede crear por si solo, pero un viaje DEBE llamar a un conductor y crearlo si no existe uno
+    // El ignore básicamente le dice que a la hora de crear un viaje junto con el
+    // conductor, no lo haga
+    // en principio, el orden debería ser, un conductor se puede crear por si solo,
+    // pero un viaje DEBE llamar a un conductor y crearlo si no existe uno
 
-    public Conductor(){
+    public Conductor() {
 
     }
 
-    public Conductor(Long id, String nombre, String apellido, String tfno, String email, String genero, Viaje viaje, Coche coche) {
+    public Conductor(Long id, String nombre, String apellido, String tfno, String email, String genero, Viaje viaje,
+            Coche coche) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
@@ -45,59 +48,68 @@ public class Conductor {
         this.genero = genero;
         this.viaje = viaje;
     }
-    
+
     public Long getId() {
         return id;
     }
-    
+
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getNombre() {
         return nombre;
     }
+
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
     public String getApellido() {
         return apellido;
     }
+
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
+
     public String getTfno() {
         return tfno;
     }
+
     public void setTfno(String tfno) {
         this.tfno = tfno;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     };
 
-     public void setGenero(String genero) {
+    public void setGenero(String genero) {
         this.genero = genero;
     }
-    public String getGenero(){
+
+    public String getGenero() {
         return genero;
     }
 
-    public Viaje getViaje(){
+    public Viaje getViaje() {
         return viaje;
     }
 
-    public void setViaje(Viaje viaje){
+    public void setViaje(Viaje viaje) {
         this.viaje = viaje;
     }
 
-    
     public Coche getCoche() {
         return coche;
     }
+
     public void setCoche(Coche coche) {
         this.coche = coche;
-    }    
+    }
 }

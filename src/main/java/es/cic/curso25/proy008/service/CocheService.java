@@ -20,21 +20,21 @@ public class CocheService {
     @Autowired
     CocheRepository cocheRepository;
 
-    public Long create(Coche coche){
+    public Long create(Coche coche) {
         cocheRepository.save(coche);
         LOGGER.info("Coche creado con id " + coche.getId());
         return coche.getId();
     }
 
     @Transactional(readOnly = true)
-    public Optional<Coche> get(Long id){
+    public Optional<Coche> get(Long id) {
         Optional<Coche> coche = cocheRepository.findById(id);
         LOGGER.info("Coche listado");
         return coche;
     }
 
     @Transactional(readOnly = true)
-    public List<Coche> getAll(){
+    public List<Coche> getAll() {
         List<Coche> coches = cocheRepository.findAll();
         LOGGER.info("Todos los coches listados");
         return coches;

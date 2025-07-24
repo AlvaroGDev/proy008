@@ -47,7 +47,7 @@ public class ViajeController {
     public Viaje create(@RequestBody Viaje viaje) {
 
         if (viaje.getId() != null)
-            throw new SecurityException("No me puedes pasar un id");
+            throw new SecurityException("No me puedes pasar un id para generar un registro");
 
         LOGGER.info("Creo un viaje");
         viaje = viajeService.create(viaje);
@@ -56,14 +56,14 @@ public class ViajeController {
     }
 
     @PutMapping
-    public void update(@RequestBody Viaje viaje){
+    public Viaje update(@RequestBody Viaje viaje){
         LOGGER.info("Actualizo un viaje");
 
         if(viaje.getId() == null)
-        throw new SecurityException("Me estas intentando crear un viaje a través de una modificación");
+        throw new SecurityException("O te ha faltado el ID, o has intentado crear un registro mediante modificación.");
         // Si el ID es nulo, lo que está intentando es crearlo en vez de actualizarlo, por lo que lanzamos excepción
 
-        viajeService.update(viaje);
+        return viajeService.update(viaje);
     }
 
     @DeleteMapping("/{id}")

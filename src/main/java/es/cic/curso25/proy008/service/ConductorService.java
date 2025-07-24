@@ -21,15 +21,15 @@ public class ConductorService {
 
         return conductorRepository.save(conductor);
     }
-    
+
     @Transactional(readOnly = true)
-    public Conductor get(Long id){
+    public Conductor get(Long id) {
         Optional<Conductor> conductor = conductorRepository.findById(id);
         return conductor.orElse(null);
     }
 
     @Transactional(readOnly = true)
-    public List<Conductor> getAll() {
+    public List<Conductor> get() {
         return conductorRepository.findAll();
     }
 
