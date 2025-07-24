@@ -11,11 +11,13 @@ import es.cic.curso25.proy008.model.Conductor;
 import es.cic.curso25.proy008.repository.ConductorRepository;
 
 @Service
+@Transactional
 public class ConductorService {
 
     @Autowired
     private ConductorRepository conductorRepository;
 
+<<<<<<< HEAD
     public Conductor create(Conductor conductor) {
 
         return conductorRepository.save(conductor);
@@ -24,12 +26,24 @@ public class ConductorService {
     @Transactional(readOnly = true)
     public Conductor get(Long id) {
 
+=======
+    public Conductor create(Conductor conductor){
+        return conductorRepository.save(conductor);
+    }
+
+    @Transactional(readOnly = true)
+    public Conductor get(Long id){
+>>>>>>> ramaCompra
         Optional<Conductor> conductor = conductorRepository.findById(id);
         return conductor.orElse(null);
     }
 
     @Transactional(readOnly = true)
+<<<<<<< HEAD
     public List<Conductor> getAll() {
+=======
+    public List<Conductor> getAll(){
+>>>>>>> ramaCompra
         return conductorRepository.findAll();
     }
 

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @PropertySource("classpath:mifichero.properties")
 public class MiConfiguracion {
+<<<<<<< HEAD
     @Value("${otraFuncionalidad}")
     private int otraFuncionalidad; //Lo ponemos en int porque es requerido (no puede ser nulo), si no fuese requerido, pondríamos Integer (puede ser null)
 
@@ -19,4 +20,14 @@ public class MiConfiguracion {
 
     // Cuando hacemos un @Autowired primero intenta buscar en el controlador, servicio o repositorio
     // Con el bean le permitimos que después de buscar en esos sitios, busque con las anotaciones de @Bean y haga los constructores
+=======
+    @Value("${otrafuncionalidad}")
+    private int otrafuncionalidad;
+
+    @Bean
+    public MiClaseCompleja MiClaseCompleja(){
+        // Lógica de construcción
+        return new MiClaseCompleja();
+    }
+>>>>>>> ramaCompra
 }

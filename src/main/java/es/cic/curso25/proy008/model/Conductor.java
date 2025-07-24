@@ -2,6 +2,10 @@ package es.cic.curso25.proy008.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+<<<<<<< HEAD
+=======
+import jakarta.persistence.CascadeType;
+>>>>>>> ramaCompra
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,7 +44,6 @@ public class Conductor {
         this.genero = genero;
         this.viaje = viaje;
     }
-
     
     public Long getId() {
         return id;
@@ -77,10 +80,10 @@ public class Conductor {
      public void setGenero(String genero) {
         this.genero = genero;
     }
-
     public String getGenero(){
         return genero;
     }
+<<<<<<< HEAD
 
     public Viaje getViaje(){
         return viaje;
@@ -91,4 +94,12 @@ public class Conductor {
     }
 
     
+=======
+    public Coche getCoche() {
+        return coche;
+    }
+    public void setCoche(Coche coche) {
+        this.coche = coche;
+    }    
+>>>>>>> ramaCompra
 }

@@ -12,7 +12,7 @@ import es.cic.curso25.proy008.controller.ConductorController;
 @RestControllerAdvice
 public class ControllerAdvice {
 
-        private final static Logger LOGGER = LoggerFactory.getLogger(ConductorController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(ConductorController.class);
 
     @ExceptionHandler(SecurityException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
