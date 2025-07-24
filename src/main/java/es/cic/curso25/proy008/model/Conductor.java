@@ -2,7 +2,6 @@ package es.cic.curso25.proy008.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,16 +22,12 @@ public class Conductor {
     private String genero;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "conductor", cascade = CascadeType.REMOVE) // Esto hará que al borrar un conductor borre también el viaje asociado
+    @OneToOne(mappedBy = "conductor") // Esto hará que al borrar un conductor borre también el viaje asociado
     private Viaje viaje;
 
     @JsonIgnore
     @OneToOne(mappedBy = "conductor") 
     private Coche coche;
-    // El ignore básicamente le dice que a la hora de crear un viaje junto con el
-    // conductor, no lo haga
-    // en principio, el orden debería ser, un conductor se puede crear por si solo,
-    // pero un viaje DEBE llamar a un conductor y crearlo si no existe uno
 
     public Conductor() {
 
