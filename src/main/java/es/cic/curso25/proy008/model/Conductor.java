@@ -2,6 +2,7 @@ package es.cic.curso25.proy008.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -21,7 +22,7 @@ public class Conductor {
     private String genero;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "conductor")
+    @OneToOne(mappedBy = "conductor", cascade = CascadeType.REMOVE)
     private Coche coche;
     
     public Long getId() {

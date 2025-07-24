@@ -7,22 +7,25 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import es.cic.curso25.proy008.model.Coche;
 import es.cic.curso25.proy008.model.Conductor;
-import es.cic.curso25.proy008.repository.ConductorRepository;
 import es.cic.curso25.proy008.service.CocheService;
 
 @SpringBootTest
@@ -36,16 +39,12 @@ public class ConductorCompraCocheIntegrationTest {
     ObjectMapper objectMapper;
 
     @Autowired
-    ConductorRepository conductorRepository;
-
-    @Autowired
     CocheService cocheService;
 
     @Test
     void testComprarCoche() throws Exception {
-
         /*
-         * Primero se crea un Conductor
+         * Primero se crea el Conductor
          */
         Conductor conductor = new Conductor();
         conductor.setNombre("Manolo");
@@ -61,48 +60,54 @@ public class ConductorCompraCocheIntegrationTest {
         coche.setMarca("Ford");
         coche.setNumPlazas(5);
         coche.setNumPuertas(5);
-        coche.setTipoCombustible("Diesel");
-
-        conductor.setCoche(coche);
-        coche.setConductor(conductor);
+        coche.setTipoCombustible("Diesel");    
         
-        String conductorJSON = objectMapper.writeValueAsString(conductor);
+        coche.setConductor(conductor);
+        // conductor.setCoche(coche);
+        
+        // Convertimos el objeto Coche que tiene Conductor en JSON
         String cocheJSON = objectMapper.writeValueAsString(coche);
 
         /*
-         * Se hace el INSERT del Coche y del Conductor
+         * Hacemos la solicitud HTTP para crear el Coche y a su vez el Conductor
          */
-        mockMvc.perform(post("/conductor")
-                .contentType("application/json")
-                .content(conductorJSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(resultado -> {
-                    String respuesta = resultado.getResponse().getContentAsString();
-                    Conductor conductorPrueba = objectMapper.readValue(respuesta, Conductor.class);
-                    assertTrue(conductorPrueba.getId() > 0, "El valor debe ser mayor que 0");
-
-                    Optional<Conductor> revisarConductor = conductorRepository.findById(conductorPrueba.getId());
-                    assertTrue(revisarConductor.isPresent());
-                });
-
-        mockMvc.perform(post("/coche")
+        MvcResult mvcResult = mockMvc.perform(post("/conductor/compra")
                 .contentType("application/json")
                 .content(cocheJSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(result -> {
-                    // Extrae el contenido de la respuesta como string
-                    String respuesta = result.getResponse().getContentAsString();
-                    // Convierte la respuesta JSON en tipo Long y después se busca el coche con ese
-                    // Id
-                    // Coche cocheCreado = objectMapper.readValue(respuesta, Coche.class);
-                    Long idCoche = objectMapper.readValue(respuesta, Long.class);
-                    Optional<Coche> cocheCreado = cocheService.get(idCoche);
-                    // Verifica que el coche creado tiene un ID no nulo
-                    assertTrue(cocheCreado.get().getId() != null, "El valor debe de ser no nulo");
-                    // Verifica que el coche creado está presente en el sistema
-                    assertTrue(cocheCreado.isPresent());
+                .andExpect(resultado -> {
+                    assertNotNull(
+                        objectMapper.readValue(
+                            resultado.getResponse().getContentAsString(), Coche.class)
+                        );
+                })
+                .andReturn();
+        
+        Coche cocheCreado = objectMapper.readValue(mvcResult.getResponse().getContentAsString(),Coche.class);
+        Long id = cocheCreado.getId();
+
+        mockMvc.perform(get("/coche/" + id))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(resultado -> {
+                    assertEquals(
+                        objectMapper.readValue(resultado.getResponse().getContentAsString(), Coche.class).getId(), 
+                        id);
                 });
+        
+        cocheCreado.getConductor().setApellido("Acereda");
+
+        String cocheCreadoJSON = objectMapper.writeValueAsString(cocheCreado);
+
+        mockMvc.perform(put("/coche")
+                .contentType("application/json")
+                .content(cocheCreadoJSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+                
+        mockMvc.perform(delete("/coche/" + id))
+                .andDo(print())
+                .andExpect(status().isOk());        
     }
 }

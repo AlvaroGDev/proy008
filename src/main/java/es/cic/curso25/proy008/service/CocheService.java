@@ -7,11 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import es.cic.curso25.proy008.model.Coche;
 import es.cic.curso25.proy008.repository.CocheRepository;
 
 @Service
+@Transactional
 public class CocheService {
     private final static Logger LOGGER = LoggerFactory.getLogger(CocheService.class);
 
@@ -24,12 +26,14 @@ public class CocheService {
         return coche.getId();
     }
 
+    @Transactional(readOnly = true)
     public Optional<Coche> get(Long id){
         Optional<Coche> coche = cocheRepository.findById(id);
         LOGGER.info("Coche listado");
         return coche;
     }
 
+    @Transactional(readOnly = true)
     public List<Coche> getAll(){
         List<Coche> coches = cocheRepository.findAll();
         LOGGER.info("Todos los coches listados");

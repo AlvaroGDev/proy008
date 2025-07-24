@@ -12,16 +12,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import es.cic.curso25.proy008.model.Coche;
 import es.cic.curso25.proy008.model.Conductor;
+import es.cic.curso25.proy008.service.CocheService;
 import es.cic.curso25.proy008.service.ConductorService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/conductor")
 public class ConductorController {
 
-
+    @Autowired
+    private CocheService cocheService;
 
     @Autowired
     private ConductorService conductorService;
@@ -41,11 +45,17 @@ public class ConductorController {
 
     @PostMapping
     public Conductor create(@RequestBody Conductor conductor) {
-
         if (conductor.getId() != null)
             throw new SecurityException();
 
         return conductorService.create(conductor);
+    }
+
+    @PostMapping("/compra")
+    public Coche create(@RequestBody Coche coche){
+        Long idCocheCreado = cocheService.create(coche);
+        Optional <Coche> cocheCreado = cocheService.get(idCocheCreado);
+        return cocheCreado.get();
     }
 
     @DeleteMapping("/{id}")

@@ -2,6 +2,7 @@ package es.cic.curso25.proy008.model;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,7 +20,10 @@ public class Coche {
     private int numPuertas;
     private int numPlazas;
     
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = {CascadeType.PERSIST, // Al crear un Coche crear tambien el Conductor asociado si este no existe
+                        CascadeType.REMOVE, // Al borrar el Coche borra el Conductor asociado
+                        CascadeType.MERGE}, // Al actualizar el Coche actualiza tambien el Conductor asociado
+                        fetch = FetchType.EAGER) // Al cargar el Coche se carga también al instante el Conductor
     private Conductor conductor;
 
     public Long getId() {
