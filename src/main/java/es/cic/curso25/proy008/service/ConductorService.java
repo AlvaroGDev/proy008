@@ -17,33 +17,19 @@ public class ConductorService {
     @Autowired
     private ConductorRepository conductorRepository;
 
-<<<<<<< HEAD
     public Conductor create(Conductor conductor) {
 
         return conductorRepository.save(conductor);
     }
     
     @Transactional(readOnly = true)
-    public Conductor get(Long id) {
-
-=======
-    public Conductor create(Conductor conductor){
-        return conductorRepository.save(conductor);
-    }
-
-    @Transactional(readOnly = true)
     public Conductor get(Long id){
->>>>>>> ramaCompra
         Optional<Conductor> conductor = conductorRepository.findById(id);
         return conductor.orElse(null);
     }
 
     @Transactional(readOnly = true)
-<<<<<<< HEAD
     public List<Conductor> getAll() {
-=======
-    public List<Conductor> getAll(){
->>>>>>> ramaCompra
         return conductorRepository.findAll();
     }
 
