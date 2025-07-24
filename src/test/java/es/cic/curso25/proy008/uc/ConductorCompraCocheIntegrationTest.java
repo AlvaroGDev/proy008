@@ -47,19 +47,34 @@ public class ConductorCompraCocheIntegrationTest {
         /*
          * Primero se crea un Conductor
          */
+        Conductor conductor = new Conductor();
+        conductor.setNombre("Manolo");
+        conductor.setApellido("Testeador");
+        conductor.setTfno("123654987");
+        conductor.setEmail("test@cic.es");
+        conductor.setGenero("M");
+        
+        /*
+        * Después se crea el Coche
+        */        
+        Coche coche = new Coche();
+        coche.setMarca("Ford");
+        coche.setNumPlazas(5);
+        coche.setNumPuertas(5);
+        coche.setTipoCombustible("Diesel");
 
-        Conductor miConductor = new Conductor();
-        miConductor.setNombre("Manolo");
-        miConductor.setApellido("Testeador");
-        miConductor.setTfno("123654987");
-        miConductor.setEmail("test@cic.es");
-        miConductor.setGenero("M");
+        conductor.setCoche(coche);
+        coche.setConductor(conductor);
+        
+        String conductorJSON = objectMapper.writeValueAsString(conductor);
+        String cocheJSON = objectMapper.writeValueAsString(coche);
 
-        String miConductorJSON = objectMapper.writeValueAsString(miConductor);
-
+        /*
+         * Se hace el INSERT del Coche y del Conductor
+         */
         mockMvc.perform(post("/conductor")
                 .contentType("application/json")
-                .content(miConductorJSON))
+                .content(conductorJSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(resultado -> {
@@ -71,24 +86,9 @@ public class ConductorCompraCocheIntegrationTest {
                     assertTrue(revisarConductor.isPresent());
                 });
 
-        /*
-         * Después se crea el Coche
-         */
-
-        Coche coche = new Coche();
-        coche.setMarca("Ford");
-        coche.setNumPlazas(5);
-        coche.setNumPuertas(5);
-        coche.setTipoCombustible("Diesel");
-
-        // Convierte el objeto Coche a formato JSON para enviarlo en la petición
-        String cocheJson = objectMapper.writeValueAsString(coche);
-
-        // Se realiza una petición POST simulada al endpoint /coche con los datos del
-        // coche en formato JSON
         mockMvc.perform(post("/coche")
                 .contentType("application/json")
-                .content(cocheJson))
+                .content(cocheJSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(result -> {

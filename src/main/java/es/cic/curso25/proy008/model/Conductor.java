@@ -1,8 +1,11 @@
 package es.cic.curso25.proy008.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Conductor {
@@ -16,6 +19,10 @@ public class Conductor {
     private String tfno;
     private String email;
     private String genero;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "conductor")
+    private Coche coche;
     
     public Long getId() {
         return id;
@@ -51,10 +58,13 @@ public class Conductor {
      public void setGenero(String genero) {
         this.genero = genero;
     }
-
     public String getGenero(){
         return genero;
     }
-
-    
+    public Coche getCoche() {
+        return coche;
+    }
+    public void setCoche(Coche coche) {
+        this.coche = coche;
+    }    
 }

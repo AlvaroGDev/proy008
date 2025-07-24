@@ -1,9 +1,11 @@
 package es.cic.curso25.proy008.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Coche {
@@ -16,6 +18,9 @@ public class Coche {
     private String tipoCombustible;
     private int numPuertas;
     private int numPlazas;
+    
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Conductor conductor;
 
     public Long getId() {
         return id;
@@ -46,5 +51,11 @@ public class Coche {
     }
     public void setNumPlazas(int numPlazas) {
         this.numPlazas = numPlazas;
+    }
+    public Conductor getConductor() {
+        return conductor;
+    }
+    public void setConductor(Conductor conductor) {
+        this.conductor = conductor;
     }
 }
