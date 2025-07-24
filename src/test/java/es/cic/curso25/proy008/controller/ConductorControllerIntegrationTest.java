@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import es.cic.curso25.proy008.configuration.MiClaseCompleja;
 import es.cic.curso25.proy008.model.Conductor;
 import es.cic.curso25.proy008.repository.ConductorRepository;
 import es.cic.curso25.proy008.service.ConductorService;
@@ -27,6 +28,9 @@ import es.cic.curso25.proy008.service.ConductorService;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ConductorControllerIntegrationTest {
+
+        @Autowired
+        MiClaseCompleja miClaseCompleja;
 
         @Autowired
         MockMvc mockMvc;
