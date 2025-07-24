@@ -19,7 +19,7 @@ public class Viaje {
     private String estado;
     private String fecha;
 
-    @OneToOne(cascade = CascadeType.PERSIST) 
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}) 
     private Conductor conductor;
 /*Esto en la práctica lo que hace es:
 Para generar un viaje, necesitamos un conductor (ya que tiene como clave foránea un idConductor)

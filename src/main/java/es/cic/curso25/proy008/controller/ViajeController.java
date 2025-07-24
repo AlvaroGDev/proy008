@@ -66,8 +66,8 @@ public class ViajeController {
         viajeService.update(viaje);
     }
 
-    @DeleteMapping
-    public void delete(@RequestBody Long id){
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id){
         LOGGER.info("Borro un viaje");
 
         viajeService.delete(id);

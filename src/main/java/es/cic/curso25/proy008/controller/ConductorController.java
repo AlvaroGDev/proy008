@@ -57,6 +57,8 @@ public class ConductorController {
         return viajeCreado;
     }
 
+    //Este método de generarViaje no debería hacer falta porque no deja de utilizar el método base de crear un viaje
+
     @PutMapping
     public void update(@RequestBody Conductor conductor) {
         if (conductor.getId() == null)
