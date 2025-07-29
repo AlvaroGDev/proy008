@@ -41,10 +41,15 @@ public class Conductor {
      * de lo que queramos hacer
      */
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    // El mapped by hace dos cosas, la primera es decirnos quien va a tener la foreign key 
+    @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+    // El mapped by hace dos cosas, la primera es decirnos quien va a tener la
+    // foreign key
     // Cuando creo la mascota, creo el conductor
-    private List<Mascota> mascotas = new ArrayList<>(); 
+    private List<Mascota> mascotas = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "conductor", cascade = { CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE })
+    private Coche coche;
 
     public Conductor() {
 
@@ -59,6 +64,7 @@ public class Conductor {
         this.email = email;
         this.genero = genero;
         this.viaje = viaje;
+        this.coche = coche;
     }
 
     public Long getId() {
