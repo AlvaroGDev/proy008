@@ -3,6 +3,7 @@ package es.cic.curso25.proy008.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -44,6 +46,8 @@ public class ViajeController {
 
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED) 
+    // Lo que le decimos: Si este método acaba bien, me devuelves un created (codigo 201), si no, devuelve 200, que es un código que dice que está bien, pero podemos querer algo específico
     public Viaje create(@RequestBody Viaje viaje) {
 
         if (viaje.getId() != null)
