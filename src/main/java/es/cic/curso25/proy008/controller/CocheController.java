@@ -28,9 +28,6 @@ public class CocheController {
 
     @GetMapping("/{id}")
     public Optional<Coche> get(@PathVariable(required = true) Long id) {
-        if (cocheService.get(id) == null){
-            throw new SecurityException("Error: me estás intentando crear un coche pasando un id");
-        }
         LOGGER.info("GET '/coche/id' obtener coche por id");
         Optional<Coche> coche = cocheService.get(id);
         return coche;
@@ -46,6 +43,9 @@ public class CocheController {
 
     @PostMapping
     public Long create(@RequestBody Coche coche) {
+        if (cocheService.get(coche.getId()) == null){
+            throw new SecurityException("Error: me estás intentando crear un coche pasando un id");
+        }
         LOGGER.info("POST '/coche' guardar coche en la BBDD");
         cocheService.create(coche);
         return coche.getId();
